@@ -1,19 +1,19 @@
-import food1 from './Chicken-Biryani.jpg';
+import food1 from './chicken-biryani-5.jpg';
 import food2 from './chicken_honeyChilli.jpg';
-import food3 from './chicken_saladBackgroundRemoved.png';
+import food3 from './chickenSalad.jpg';
 import food4 from './chicken_skewers.jpg';
 import food5 from './drink1.jpg';
 import food6 from './drink2.jpg';
 import food7 from './drink3.jpg';
-import food8 from './pasta_chilliOil.png';
+import food8 from './chili-oil-noodles.jpg';
 import food9 from './pasta_redSauce.jpg';
-import food10 from './pasta_whiteSauce.png';
-import food11 from './pizza1.jpg';
+import food10 from './white-sauce-pasta.jpg';
+import food11 from './cheesePizza.jpg';
 import food12 from './pizza2.jpg';
-import food13 from './pizza3.jpg';
-import food15 from './rice1.jpg';
+import food13 from './vegetarian-pizza.jpg';
+import food15 from './FriedRice.jpg';
 import food16 from './rice2.jpg';
-import food17 from './rice3.jpg';
+import food17 from './Jeera-Rice.jpg';
 
 
 export const categoryItem = [
@@ -95,7 +95,7 @@ export const product = [
     },
     {
         _id: "g",
-        name: "Orange Juice",
+        name: "Blue Lagoon",
         description: "Freshly squeezed orange juice.",
         price: 50,
         image: food7,
@@ -105,7 +105,7 @@ export const product = [
 
     {
         _id: "h",
-        name: "Chilli Oil Spaghetti",
+        name: "Chilli Oil Noodles",
         description: "Spaghetti tossed in spicy chilli oil and garlic.",
         price: 130,
         image: food8,

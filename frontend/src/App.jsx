@@ -7,11 +7,14 @@ import Cart from './pages/Cart/Cart'
 import Checkout from './pages/Checkout/Checkout'
 import Order from './pages/Order/Order'
 import Footer from './components/Footer/Footer'
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 const App = () => {
   return (
     <div>
+      <ToastContainer />
       <Navbar/>
       <Routes>
         <Route path='/' element= {<Home/>}/>
