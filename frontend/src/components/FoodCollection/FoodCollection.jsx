@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { categoryItem, product } from '../../assets/assets'
 import { FoodContext } from '../../context/FoodContext'
+import './FoodCollection.css'
 
 const FoodCollection = () => {
 
@@ -33,9 +34,16 @@ const FoodCollection = () => {
           <div className='grid_display'>
             {
               Products.length > 0 ? (
-                Products.map((product) =>(
+                Products.filter((product) => Category === "All" || Category === product.category).map((product) =>(
                   <div key={product._id} className='product_card' >
-
+                    <div className='product-image'>
+                      <img src={product.image} alt="" />
+                    </div>
+                    <h3>{product.name}</h3>
+                    <div className='price-add'>
+                      <p> Rs.{product.price}</p>
+                      <button>Add to cart</button>
+                    </div>
                   </div>
                 ))
               ) : (
