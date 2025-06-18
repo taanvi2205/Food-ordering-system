@@ -1,6 +1,6 @@
 import food1 from './chicken_biryani.jpg';
 import food2 from './chicken_honeyChilli.jpg';
-import food3 from './chicken_salad.jpg';
+import food3 from './chicken_saladBackgroundRemoved.jpg';
 import food4 from './chicken_skewers.jpg';
 import food5 from './drink1.jpg';
 import food6 from './drink2.jpg';
