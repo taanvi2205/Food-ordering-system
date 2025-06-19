@@ -2,12 +2,15 @@ import React, {createContext, useEffect, useState} from 'react'
 export const FoodContext = createContext()
 import { product  } from '../assets/assets'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const FoodContextProvider = ({children}) => {
-    const delivery_fee = 12
+    const delivery_fee = 120
+    const currency = 'Rs'
 
     const [Products, setProducts] = useState(product)
     const [cartItems, setCartItems] = useState({})
+    const navigate = useNavigate()
 
     const addToCart = async(itemId)=>{
         const updatedCart = {...cartItems};
@@ -39,7 +42,7 @@ const FoodContextProvider = ({children}) => {
   
 
     return(
-        <FoodContext.Provider value={{Products, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity}}>
+        <FoodContext.Provider value={{Products,cartItems, navigate,currency, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity}}>
             {children}
         </FoodContext.Provider>
     )
