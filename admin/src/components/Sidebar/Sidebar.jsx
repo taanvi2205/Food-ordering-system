@@ -5,7 +5,11 @@ import {IoLogOut} from 'react-icons/io5'
 import {MdFormatListBulleted, MdAddShoppingCart} from 'react-icons/md'
 import './sidebar.css'
 
-const Sidebar = () => {
+const Sidebar = ({ setToken }) => {
+//   const handleLogout = () => {
+//     localStorage.removeItem('token');
+//     setToken(""); // This triggers App to show <Login />
+//   };
   return (
     <div className='sidebar-container'>
         <div className="sidebar-header">
@@ -24,7 +28,7 @@ const Sidebar = () => {
                 <MdAddShoppingCart className='sidebar-icon' />
                 <p className="sidebar-text">Orders</p>
             </NavLink  > 
-            <button className="sidebar-link loginBtn">
+            <button className="sidebar-link loginBtn" onClick={() => setToken("")} >
                 <IoLogOut className='sidebar-icon' />
                 <p className="sidebar-text">Logout</p>
             </button>
