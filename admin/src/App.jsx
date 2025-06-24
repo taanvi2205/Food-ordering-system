@@ -31,7 +31,7 @@ const App = () => {
               <div className="page-content">
                 <Routes>
                   <Route path='/add' element={<Add token={token}/> }/>
-                  <Route path='/list' element={<List />} />
+                  <Route path='/list' element={<List token={token} />} />
                   <Route path='/orders' element={<Orders />} />
               </Routes>
               </div>

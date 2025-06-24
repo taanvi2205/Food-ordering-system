@@ -9,7 +9,7 @@ import Order from './pages/Order/Order'
 import Footer from './components/Footer/Footer'
 import { ToastContainer, toast } from 'react-toastify';
 
-
+export const backendUrl = 'http://localhost:4000'
 
 const App = () => {
   return (

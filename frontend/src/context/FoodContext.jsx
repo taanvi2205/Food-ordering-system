@@ -3,6 +3,9 @@ export const FoodContext = createContext()
 import { product  } from '../assets/assets'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import {backendUrl} from '../App.jsx' 
+
 
 const FoodContextProvider = ({children}) => {
     const delivery_fee = 120
@@ -10,6 +13,7 @@ const FoodContextProvider = ({children}) => {
 
     const [Products, setProducts] = useState(product)
     const [cartItems, setCartItems] = useState({})
+    const [token, setToken] = useState('')
     const navigate = useNavigate()
 
     const addToCart = async(itemId)=>{
@@ -17,9 +21,16 @@ const FoodContextProvider = ({children}) => {
         updatedCart[itemId] = (updatedCart[itemId] || 0) + 1
         setCartItems(updatedCart)
 
-        
-
         toast.success(`Added to cart`)
+
+        if(token){
+            try {
+                await axios.post(`${backendUrl}/api/cart/add`, {itemId}, {headers: {token}})
+            } catch (error) {
+                console.log(error);
+                toast.error(error.message)
+            }
+        }
     }
 
     const getCartCount =()=> {
@@ -30,6 +41,15 @@ const FoodContextProvider = ({children}) => {
         let cartData = {...cartItems}
         cartData[itemId] = quantity;
         setCartItems(cartData)
+
+        if(token){
+            try {
+                await axios.post(`${backendUrl}/api/cart/update`, {itemId, quantity}, {headers: {token}})
+            } catch (error) {
+                console.log(error);
+                toast.error(error.message)
+            }
+        }
     }
 
     const getCartAmount = () =>{
@@ -39,10 +59,48 @@ const FoodContextProvider = ({children}) => {
         },0)
     }
 
-  
+    
+
+    const getProductsData = async()=>{
+        try {
+            const response = await axios.get(`${backendUrl}/api/product/list`)
+            console.log(response.data)
+        if(response.data.success){
+            setProducts(response.data.products)
+            } else {
+            toast.error(response.data.message)
+            }
+        }catch (error) {
+            console.log(error);
+            toast.error(error.message)
+            }
+    }
+    const getUserCart = async(token)=>{
+        try {
+            const response = await axios.post(`${backendUrl}/api/cart/get`, {}, {headers: {token}})
+
+            if(response.data.success){
+            setCartItems(response.data.cartData)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
+    }
+            
+    useEffect(()=> {
+        getProductsData()
+    },[])
+
+    useEffect(()=>{
+        if(!token && localStorage.getItem('token')){
+            setToken(localStorage.getItem('token'));
+            getUserCart(localStorage.getItem('token'))
+        }
+    },[])
 
     return(
-        <FoodContext.Provider value={{Products,cartItems, navigate,currency, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity}}>
+        <FoodContext.Provider value={{Products, getUserCart,  cartItems, navigate,currency, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity, token, setToken}}>
             {children}
         </FoodContext.Provider>
     )
