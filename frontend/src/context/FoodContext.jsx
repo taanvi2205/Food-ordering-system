@@ -4,7 +4,7 @@ import { product  } from '../assets/assets'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import {backendUrl} from '../App.jsx' 
+import {backendUrl} from "../App"
 
 
 const FoodContextProvider = ({children}) => {
