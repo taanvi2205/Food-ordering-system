@@ -98,28 +98,42 @@
     padding: 0.2rem 0.4rem;
 }
 
-.profile-group{
+.profile-group {
     position: relative;
+    display: inline-block;
 }
 
-.dropdown-menu{
+.dropdown-menu {
     display: none;
     position: absolute;
-    top: 20px;
-    right: -30px;
+    top: 100%; /* directly below the icon */
+    right: 0;
     background: #313131;
     border: 1px solid #C7D6D5;
     border-radius: 5px;
     width: 130px;
     font-size: 18px;
     padding: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-top: 20px;
-} 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
 
-.profile-group:hover .dropdown-menu{
+.profile-group:hover .dropdown-menu {
     display: block;
 }
+
+
+
+.profile-group {
+    position: relative;
+
+}
+
+.profile-group:hover .dropdown-menu,
+.profile-group .dropdown-menu:hover {
+    display: block;
+}
+
 
 .dropdown-item{
     color: #C7D6D5;

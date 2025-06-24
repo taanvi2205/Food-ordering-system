@@ -18,7 +18,13 @@ const Navbar = () => {
         navigate(path)
     }
 
-    const {getCartCount} = useContext(FoodContext)
+    const logout = () => {
+        localStorage.removeItem('token');
+        setToken('');
+        navigate('/login');
+    }
+
+    const {getCartCount, token, setToken} = useContext(FoodContext)
   return (
     <div>
         {
@@ -47,7 +53,7 @@ const Navbar = () => {
                     <div className='dropdown-menu'>
                         <Link to='/login' ><p className='dropdown-item'>Login/Sign Up </p></Link>
                         <Link to='/orders' ><p className='dropdown-item'>Orders</p></Link>
-                        <p className='dropdown-item'>Logout</p>
+                        <p onClick={logout} className='dropdown-item'>Logout</p>
                     </div>
                 </div>
                 <button className='cart-icon' onClick={()=>handleNavigation('/cart')}>
