@@ -17,7 +17,7 @@ const Navbar = () => {
         },2000)
         navigate(path)
     }
-
+ 
     const logout = () => {
         localStorage.removeItem('token');
         setToken('');

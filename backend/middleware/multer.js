@@ -1,9 +1,8 @@
 import multer from "multer";
 
-// ⚠️ Add `destination` to store uploaded files temporarily
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // ⬅️ folder to save the image locally
+    cb(null, "uploads/"); 
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname); // avoid name conflicts

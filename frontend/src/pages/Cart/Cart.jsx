@@ -55,13 +55,20 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <input type="number" min={1} defaultValue={item.quantity} className='quantity-input' 
-                onChange={(e) =>
-                  e.target.value === "" || e.target.value === "0"
-                    ? null
-                    : updateQuantity(item.id, Number(e.target.value)) // unchanged as requested
-                }
-                 />
+                <input
+                  type="number"
+                  min={1}
+                  value={item.quantity}
+                  className='quantity-input'
+                  onChange={(e) =>
+                    e.target.value === "" || e.target.value === "0"
+                      ? null
+                      : updateQuantity(item._id, Number(e.target.value))
+                  }
+
+                />
+
+               
                  <MdDelete className='delete-icon' onClick={() => updateQuantity(item._id, 0)} />
               </div>
             );

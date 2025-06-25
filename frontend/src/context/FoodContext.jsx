@@ -17,9 +17,11 @@ const FoodContextProvider = ({children}) => {
     const navigate = useNavigate()
 
     const addToCart = async(itemId)=>{
+        
         const updatedCart = {...cartItems};
         updatedCart[itemId] = (updatedCart[itemId] || 0) + 1
         setCartItems(updatedCart)
+        console.log(`${itemId} added to cart`)
 
         toast.success(`Added to cart`)
 
@@ -33,24 +35,34 @@ const FoodContextProvider = ({children}) => {
         }
     }
 
-    const getCartCount =()=> {
-        return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0)
-    }
+    const getCartCount = () => {
+        return Object.entries(cartItems || {})
+            .filter(([itemId, qty]) => itemId !== 'undefined' && qty > 0)
+            .reduce((total, [_, qty]) => total + qty, 0);
+    };
 
-    const updateQuantity = async(itemId, quantity)=> {
-        let cartData = {...cartItems}
+    const updateQuantity = async (itemId, quantity) => {
+        if (!itemId || typeof quantity !== 'number') {
+            console.warn('Invalid itemId or quantity');
+            return;
+        }
+
+        let cartData = { ...cartItems };
         cartData[itemId] = quantity;
-        setCartItems(cartData)
+        setCartItems(cartData);
 
-        if(token){
+        if (token) {
             try {
-                await axios.post(`${backendUrl}/api/cart/update`, {itemId, quantity}, {headers: {token}})
+                await axios.post(`${backendUrl}/api/cart/update`, { itemId, quantity }, {
+                    headers: { token }
+                });
             } catch (error) {
                 console.log(error);
-                toast.error(error.message)
+                toast.error(error.message);
             }
         }
-    }
+    };
+
 
     const getCartAmount = () =>{
         return Object.entries(cartItems).reduce((totalAmount, [itemId,quantity]) =>{
@@ -80,7 +92,7 @@ const FoodContextProvider = ({children}) => {
             const response = await axios.post(`${backendUrl}/api/cart/get`, {}, {headers: {token}})
 
             if(response.data.success){
-            setCartItems(response.data.cartData)
+                setCartItems(response.data.cartData)
             }
         } catch (error) {
             console.log(error);
@@ -92,12 +104,21 @@ const FoodContextProvider = ({children}) => {
         getProductsData()
     },[])
 
-    useEffect(()=>{
-        if(!token && localStorage.getItem('token')){
-            setToken(localStorage.getItem('token'));
-            getUserCart(localStorage.getItem('token'))
-        }
-    },[])
+        // ✅ Step 1: Set token from localStorage
+    useEffect(() => {
+    const savedToken = localStorage.getItem('token');
+    if (savedToken) {
+        setToken(savedToken);
+    }
+    }, []);
+
+    // ✅ Step 2: When token is available, get user cart
+    useEffect(() => {
+    if (token) {
+        getUserCart(token);
+    }
+    }, [token]);
+
 
     return(
         <FoodContext.Provider value={{Products, getUserCart,  cartItems, navigate,currency, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity, token, setToken}}>

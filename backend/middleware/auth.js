@@ -7,9 +7,9 @@ const authUser = async(req,res,next)=>{
     return res.json({success:false, message: "Login to add items to cart"})
   }
 
-  try {
+    try {
     const token_decode = jwt.verify(token, process.env.JWT_SECRET)
-    req.body.userId = token_decode.userId
+    req.body.userId = token_decode.id
     next()
   } catch (error) {
         console.log(error);
