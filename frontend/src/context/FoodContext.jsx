@@ -77,6 +77,7 @@ const FoodContextProvider = ({children}) => {
         try {
             const response = await axios.get(`${backendUrl}/api/product/list`)
             console.log(response.data)
+            
         if(response.data.success){
             setProducts(response.data.products)
             } else {
@@ -104,7 +105,6 @@ const FoodContextProvider = ({children}) => {
         getProductsData()
     },[])
 
-        // ✅ Step 1: Set token from localStorage
     useEffect(() => {
     const savedToken = localStorage.getItem('token');
     if (savedToken) {
@@ -112,7 +112,6 @@ const FoodContextProvider = ({children}) => {
     }
     }, []);
 
-    // ✅ Step 2: When token is available, get user cart
     useEffect(() => {
     if (token) {
         getUserCart(token);
@@ -121,7 +120,7 @@ const FoodContextProvider = ({children}) => {
 
 
     return(
-        <FoodContext.Provider value={{Products, getUserCart,  cartItems, navigate,currency, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity, token, setToken}}>
+        <FoodContext.Provider value={{Products, getUserCart, setCartItems, cartItems, navigate,currency, getCartAmount,addToCart, delivery_fee, getCartCount,updateQuantity, token, setToken}}>
             {children}
         </FoodContext.Provider>
     )
