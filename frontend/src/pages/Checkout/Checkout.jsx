@@ -78,8 +78,8 @@ const Checkout = () => {
         case "gpay":
           const gpayResponse = await axios.post(backendUrl + '/api/order/stripe', orderData, { headers: { token } });
           if (gpayResponse.data.success) {
-            setCartItems({});
-            navigate("/orders");
+            const {session_url} = gpayResponse.data
+            window.location.replace(session_url)  
           } else {
             toast.error(gpayResponse.data.message);
           }

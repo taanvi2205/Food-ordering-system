@@ -2,8 +2,12 @@ import orderModel from "../models/orderModels.js"
 import productModel from "../models/productModels.js"
 import userModel from '../models/userModel.js'
 import Order from '../models/orderModels.js';
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
+dotenv.config();
 
- 
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const currency = '₹'
 const deliveryCharge = 120
 const placeOrder = async (req, res) => {
@@ -64,20 +68,19 @@ const placeOrder = async (req, res) => {
 const placeOrderGpay = async (req, res) => {
   try {
     const { userId, amount, address } = req.body;
-    const userData = await userModel.findById(userId);
+    const { origin } = req.headers;
 
+    const userData = await userModel.findById(userId);
     if (!userData) {
       return res.json({ success: false, message: "User not found" });
     }
 
     const items = await Promise.all(
       Object.entries(userData.cartData)
-        .filter(([itemId]) => itemId.match(/^[a-f\d]{24}$/i))
+        .filter(([itemId]) => itemId.match(/^[a-f\d]{24}$/i)) // ensure valid ObjectId
         .map(async ([itemId, quantity]) => {
           const product = await productModel.findById(itemId);
-          if (!product) {
-            throw new Error("No product found for itemId " + itemId);
-          }
+          if (!product) throw new Error("Invalid product in cart");
 
           return {
             itemId,
@@ -99,7 +102,7 @@ const placeOrderGpay = async (req, res) => {
       amount,
       address,
       paymentMethod: "GPay",
-      payment: true,
+      payment: false,
       date: Date.now(),
       status: "Placed"
     };
@@ -107,13 +110,44 @@ const placeOrderGpay = async (req, res) => {
     const newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    await userModel.findByIdAndUpdate(userId, { cartData: {} });
+    // ✅ Define and fill line_items
+    const line_items = items.map(item => ({
+      price_data: {
+        currency: "inr",
+        product_data: {
+          name: item.name
+        },
+        unit_amount: item.price * 100 // convert ₹ to paise
+      },
+      quantity: item.quantity
+    }));
 
-    res.json({ success: true, message: "Order Placed via GPay" });
+    // ✅ Add delivery charge as separate item
+    line_items.push({
+      price_data: {
+        currency: "inr",
+        product_data: { name: "Delivery Charge" },
+        unit_amount: deliveryCharge * 100
+      },
+      quantity: 1
+    });
+
+    const session = await stripe.checkout.sessions.create({
+      success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
+      cancel_url: `${origin}/verify?success=false&orderId=${newOrder._id}`,
+      line_items,
+      mode: "payment",
+      payment_method_types: ["card"] // This enables GPay on supported devices
+    });
+
+    res.json({ success: true, session_url: session.url });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: "Order could not be placed" });
+    console.log("[❌] placeOrderGpay error:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 
 const allOrder = async (req, res) => {
