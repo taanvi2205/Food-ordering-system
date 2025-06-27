@@ -11,9 +11,9 @@ import { toast } from 'react-toastify'
 
 const Checkout = () => {
 
-  const [method , setMethod] = useState("cod")
+  const [method, setMethod] = useState("cod")
 
-  const{cartItems, setCartItems, getCartAmount, navigate, delivery_fee, token, Products} = useContext(FoodContext)
+  const { cartItems, setCartItems, getCartAmount, navigate, delivery_fee, token, Products } = useContext(FoodContext)
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -49,8 +49,8 @@ const Checkout = () => {
             const itemInfo = structuredClone(
               Products.find((product) => product._id === items)
             )
-            
-            if(itemInfo){
+
+            if (itemInfo) {
               itemInfo.quantity = cartItems[items][item]
               orderItems.push(itemInfo)
             }
@@ -66,20 +66,30 @@ const Checkout = () => {
 
       switch (method) {
         case "cod":
-          console.log('backendUrl:', backendUrl)
-          const response = await axios.post(backendUrl + '/api/order/place', orderData, {headers: {token}})
-          if (response.data.success) {
-            setCartItems({})
-            navigate("/orders")
+          const codResponse = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
+          if (codResponse.data.success) {
+            setCartItems({});
+            navigate("/orders");
           } else {
-            toast.error(response.data.message)
+            toast.error(codResponse.data.message);
           }
+          break;
 
+        case "gpay":
+          const gpayResponse = await axios.post(backendUrl + '/api/order/stripe', orderData, { headers: { token } });
+          if (gpayResponse.data.success) {
+            setCartItems({});
+            navigate("/orders");
+          } else {
+            toast.error(gpayResponse.data.message);
+          }
           break;
 
         default:
+          toast.error("Invalid payment method selected.");
           break;
       }
+
     } catch (error) {
       console.log(error)
       toast.error(error.message)
@@ -94,10 +104,10 @@ const Checkout = () => {
           <fieldset className='payment-method'>
             <legend>Payment Options</legend>
             <div className="payment-options">
-              <div onClick={()=>setMethod("gpay")} className={`payment-option ${method === 'gpay' ? 'selected' : ""}  ` }>
-                <img src={Gpay} alt="" className='payment-logo'/>
+              <div onClick={() => setMethod("gpay")} className={`payment-option ${method === 'gpay' ? 'selected' : ""}  `}>
+                <img src={Gpay} alt="" className='payment-logo' />
               </div>
-              <div onClick={()=>setMethod("cod")} className={`payment-option ${method === 'cod' ? 'selected' : ""}  ` }>
+              <div onClick={() => setMethod("cod")} className={`payment-option ${method === 'cod' ? 'selected' : ""}  `}>
                 <span className='payment-text'>CASH ON DELIVERY</span>
               </div>
             </div>
@@ -107,22 +117,22 @@ const Checkout = () => {
           </div>
 
           <div className="form-row">
-            <input type="text" name='firstName' value={formData.firstName} onChange={onChangeHandler } className='form-input' placeholder='First Name'/>
-            <input type="text" name='lastName' value={formData.lastName} onChange={onChangeHandler } className='form-input' placeholder='Last Name'/>
+            <input type="text" name='firstName' value={formData.firstName} onChange={onChangeHandler} className='form-input' placeholder='First Name' />
+            <input type="text" name='lastName' value={formData.lastName} onChange={onChangeHandler} className='form-input' placeholder='Last Name' />
           </div>
 
-          <input type="email" name='email' value={formData.email} onChange={onChangeHandler } className='form-input' placeholder='Email Address'/>
-          <input type="text" name='phone' value={formData.phone} onChange={onChangeHandler } className='form-input' placeholder='Phone Number'/>
-          <input type="text" name='street' value={formData.street} onChange={onChangeHandler } className='form-input' placeholder='Street Address'/>
+          <input type="email" name='email' value={formData.email} onChange={onChangeHandler} className='form-input' placeholder='Email Address' />
+          <input type="text" name='phone' value={formData.phone} onChange={onChangeHandler} className='form-input' placeholder='Phone Number' />
+          <input type="text" name='street' value={formData.street} onChange={onChangeHandler} className='form-input' placeholder='Street Address' />
 
           <div className="form-row">
-            <input type="text" name='city' value={formData.city} onChange={onChangeHandler } className='form-input' placeholder='City'/>
-            <input type="text" name='state' value={formData.state} onChange={onChangeHandler } className='form-input' placeholder='State'/>
+            <input type="text" name='city' value={formData.city} onChange={onChangeHandler} className='form-input' placeholder='City' />
+            <input type="text" name='state' value={formData.state} onChange={onChangeHandler} className='form-input' placeholder='State' />
           </div>
 
           <div className="form-row">
-            <input type="text" name='zipcode' value={formData.zipcode} onChange={onChangeHandler } className='form-input' placeholder='Zipcode'/>
-            <input type="text" name='country' value={formData.country} onChange={onChangeHandler } className='form-input' placeholder='Country'/>
+            <input type="text" name='zipcode' value={formData.zipcode} onChange={onChangeHandler} className='form-input' placeholder='Zipcode' />
+            <input type="text" name='country' value={formData.country} onChange={onChangeHandler} className='form-input' placeholder='Country' />
           </div>
 
         </div>
@@ -135,7 +145,7 @@ const Checkout = () => {
         </div>
 
       </form>
-      
+
     </div>
   )
 }
