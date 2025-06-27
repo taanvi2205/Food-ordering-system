@@ -1,6 +1,7 @@
 import orderModel from "../models/orderModels.js"
 import productModel from "../models/productModels.js"
 import userModel from '../models/userModel.js'
+import Order from '../models/orderModels.js';
 
 
 const placeOrder = async (req, res) => {
@@ -62,6 +63,7 @@ const placeOrderGpay = async (req, res) => {
 const allOrder = async (req, res) => {
     try {
         const order = await orderModel.find({})
+        const orders = await Order.find(); 
         res.json({ success: true, orders })
     } catch (error) {
         console.log(error);
