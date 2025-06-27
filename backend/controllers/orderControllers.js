@@ -14,21 +14,24 @@ const placeOrder = async (req, res) => {
     }
 
     const items = await Promise.all(
-      Object.entries(userData.cartData).map(async ([itemId, quantity]) => {
-        const product = await productModel.findById(itemId);
-        if (!product) {
-          throw new Error("No product found for itemId " + itemId);
-        }
+      Object.entries(userData.cartData)
+        .filter(([itemId]) => itemId.match(/^[a-f\d]{24}$/i)) 
+        .map(async ([itemId, quantity]) => {
+          const product = await productModel.findById(itemId);
+          if (!product) {
+            throw new Error("No product found for itemId " + itemId);
+          }
 
-        return {
-          itemId,
-          name: product.name,
-          image: product.image,
-          price: product.price,
-          quantity
-        };
-      })
+          return {
+            itemId,
+            name: product.name,
+            image: product.image,
+            price: product.price,
+            quantity
+          };
+        })
     );
+
 
     if (items.length === 0) {
       return res.json({ success: false, message: "Cart is empty" });
@@ -42,7 +45,7 @@ const placeOrder = async (req, res) => {
       paymentMethod: "COD",
       payment: false,
       date: Date.now(),
-      status: "Placed" 
+      status: "Placed"
     };
 
     const newOrder = new orderModel(orderData);
@@ -61,36 +64,36 @@ const placeOrderGpay = async (req, res) => {
 }
 
 const allOrder = async (req, res) => {
-    try {
-        const order = await orderModel.find({})
-        const orders = await Order.find(); 
-        res.json({ success: true, orders })
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Could not fetch order" })
-    }
+  try {
+    const order = await orderModel.find({})
+    const orders = await Order.find();
+    res.json({ success: true, orders })
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Could not fetch order" })
+  }
 }
 
 const userOrder = async (req, res) => {
-    try {
-        const { userId } = req.body
-        const orders = await orderModel.find({ userId }).sort({ date: -1 })
-        res.json({ success: true, orders })
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Could not fetch order" })
-    }
+  try {
+    const { userId } = req.body
+    const orders = await orderModel.find({ userId }).sort({ date: -1 })
+    res.json({ success: true, orders })
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Could not fetch order" })
+  }
 }
 
 const updateStatus = async (req, res) => {
-    try {
-        const { orderId, status } = req.body;
-        await orderModel.findByIdAndUpdate(orderId, { status })
-        res.json({ success: true, message: "Order Status updated" })
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: error.message })
-    }
+  try {
+    const { orderId, status } = req.body;
+    await orderModel.findByIdAndUpdate(orderId, { status })
+    res.json({ success: true, message: "Order Status updated" })
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message })
+  }
 }
 
 export { placeOrder, placeOrderGpay, allOrder, userOrder, updateStatus }

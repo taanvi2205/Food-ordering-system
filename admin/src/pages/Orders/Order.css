@@ -1,0 +1,21 @@
+.order-container{
+    width: 100%;
+    overflow-x: auto;
+}
+.order-table{
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+.order-table th,
+.order-table td{
+    padding: 12px;
+    border: 1px solid #C7D6D5;
+    text-align: left;
+}
+
+.order-status{
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid #C7D6D5;
+}
