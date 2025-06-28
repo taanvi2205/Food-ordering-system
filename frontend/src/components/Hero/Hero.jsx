@@ -4,7 +4,7 @@ import { FaShippingFast } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { BiSupport } from 'react-icons/bi'
 import { MdPayment } from 'react-icons/md'
-import './hero.css'
+import './Hero.css'
 
 const Hero = () => {
   return (
