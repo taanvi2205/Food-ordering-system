@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import {useSearchParams} from 'react-router-dom'
+import { backendUrl } from '../App';
 
 const Verify = () => {
 

@@ -10,7 +10,7 @@ import Footer from './components/Footer/Footer'
 import { ToastContainer, toast } from 'react-toastify';
 import Verify from './pages/Verify'
 
-export const backendUrl = 'http://localhost:4000'
+export const backendUrl = 'https://food-ordering-system-1-yref.onrender.com/'
 
 const App = () => { 
   return (
