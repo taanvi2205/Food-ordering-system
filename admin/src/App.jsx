@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login/Login'
 import { ToastContainer } from 'react-toastify'
 
-export const backendUrl = "http://localhost:4000"
+export const backendUrl = "https://food-ordering-system-1-yref.onrender.com/"
 
 
 const App = () => {

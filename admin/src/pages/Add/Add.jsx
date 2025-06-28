@@ -25,7 +25,7 @@ const Add = ({token }) => {
       formData.append("category", category);
       if(image) formData.append("image", image); 
 
-      const response = await axios.post(`${backendUrl}/api/product/add`, formData, {
+      const response = await axios.post(`${backendUrl}api/product/add`, formData, {
         headers: {
          token 
         }
