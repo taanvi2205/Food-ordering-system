@@ -66,7 +66,7 @@ const Checkout = () => {
 
       switch (method) {
         case "cod":
-          const codResponse = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
+          const codResponse = await axios.post(backendUrl + 'api/order/place', orderData, { headers: { token } });
           if (codResponse.data.success) {
             setCartItems({});
             navigate("/orders");
@@ -76,7 +76,7 @@ const Checkout = () => {
           break;
 
         case "gpay":
-          const gpayResponse = await axios.post(backendUrl + '/api/order/stripe', orderData, { headers: { token } });
+          const gpayResponse = await axios.post(backendUrl + 'api/order/stripe', orderData, { headers: { token } });
           if (gpayResponse.data.success) {
             const {session_url} = gpayResponse.data
             window.location.replace(session_url)  

@@ -27,7 +27,7 @@ const FoodContextProvider = ({children}) => {
 
         if(token){
             try {
-                await axios.post(`${backendUrl}/api/cart/add`, {itemId}, {headers: {token}})
+                await axios.post(`${backendUrl}api/cart/add`, {itemId}, {headers: {token}})
             } catch (error) {
                 console.log(error);
                 toast.error(error.message)
@@ -53,7 +53,7 @@ const FoodContextProvider = ({children}) => {
 
         if (token) {
             try {
-                await axios.post(`${backendUrl}/api/cart/update`, { itemId, quantity }, {
+                await axios.post(`${backendUrl}api/cart/update`, { itemId, quantity }, {
                     headers: { token }
                 });
             } catch (error) {
@@ -75,7 +75,7 @@ const FoodContextProvider = ({children}) => {
 
     const getProductsData = async()=>{
         try {
-            const response = await axios.get(`${backendUrl}/api/product/list`)
+            const response = await axios.get(`${backendUrl}api/product/list`)
             console.log(response.data)
             
         if(response.data.success){
@@ -90,7 +90,7 @@ const FoodContextProvider = ({children}) => {
     }
     const getUserCart = async(token)=>{
         try {
-            const response = await axios.post(`${backendUrl}/api/cart/get`, {}, {headers: {token}})
+            const response = await axios.post(`${backendUrl}api/cart/get`, {}, {headers: {token}})
 
             if(response.data.success){
                 setCartItems(response.data.cartData)
