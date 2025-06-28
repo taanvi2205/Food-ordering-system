@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { IoMdAddCircleOutline} from 'react-icons/io'
 import {IoLogOut} from 'react-icons/io5'
 import {MdFormatListBulleted, MdAddShoppingCart} from 'react-icons/md'
-import './sidebar.css'
+import './Sidebar.css'
 
 const Sidebar = ({ setToken }) => {
 //   const handleLogout = () => {
