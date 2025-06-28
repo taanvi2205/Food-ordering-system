@@ -65,6 +65,25 @@ const placeOrder = async (req, res) => {
   }
 };
 
+const verifyStripe = async (req,res) => {
+    const {orderId, success, userId} = req.body;
+
+    try {
+        if(success === "true"){
+            await orderModel.findByIdAndUpdate(orderId, {payment: true})
+            await userModel.findByIdAndUpdate(userId, {cartData: {}})
+            res.json({success:true})
+        }
+        else{
+            await orderModel.findByIdAndDelete(orderId)
+            res.json({success: false})
+        }
+    } catch (error) {
+      console.log(error)
+      res.json({success: false, message: error.message})
+    }
+}
+
 const placeOrderGpay = async (req, res) => {
   try {
     const { userId, amount, address } = req.body;
@@ -143,7 +162,6 @@ const placeOrderGpay = async (req, res) => {
     res.json({ success: true, session_url: session.url });
 
   } catch (error) {
-    console.log("[❌] placeOrderGpay error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -183,4 +201,4 @@ const updateStatus = async (req, res) => {
   }
 }
 
-export { placeOrder, placeOrderGpay, allOrder, userOrder, updateStatus }
+export { placeOrder,verifyStripe, placeOrderGpay, allOrder, userOrder, updateStatus }
